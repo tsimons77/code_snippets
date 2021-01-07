@@ -27,7 +27,7 @@ namespace CorkBoard.Network
         {
             List<ForecastData> data = new List<ForecastData>();
 
-            string URL = "https://api.weather.gov/gridpoints/" + zone + "/40,70/forecast?units=us";
+            string URL = "https://api.weather.gov/gridpoints/" + zone + "/40,70/forecast?units=us"; //format request
             if (zone == null || zone == "")
             {
                 return data;
@@ -36,8 +36,8 @@ namespace CorkBoard.Network
 
             try
             {
-                string webText = new Net().getWebText(URL);
-                dynamic wJson = HelperFunctions.convertToDynamic(webText);
+                string webText = new Net().getWebText(URL); //make api call
+                dynamic wJson = HelperFunctions.convertToDynamic(webText); //convert to JSON
                 if (wJson != null &&
                     wJson["properties"] != null &&
                     wJson["properties"]["periods"] != null)
@@ -46,6 +46,7 @@ namespace CorkBoard.Network
                     while(wJson["properties"]["periods"][i] != null)
                     {
                         ForecastData data1;
+                        //set forecast data
                         data1.period = wJson["properties"]["periods"][i]["name"] != null ? (string)wJson["properties"]["periods"][i]["name"] : "";
                         if(data1.period == "")
                         {
