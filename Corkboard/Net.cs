@@ -10,14 +10,14 @@ namespace CorkBoard.Network
 {
     class Net
     {
-        public string getWebText(string url)
+        public string getWebText(string url) //gets html page as string 
         {
 
             WebClient wc = new WebClient();
             wc.Headers.Add("user-agent", "CorkBoard");
             try
             {
-                string text = wc.DownloadString((url.Contains("://") || url.Contains(":\\"))? url : "http://" + url);
+                string text = wc.DownloadString((url.Contains("://") || url.Contains(":\\"))? url : "http://" + url); //formats url and gets page
                 
                 return text;
             }catch (Exception)
@@ -27,14 +27,14 @@ namespace CorkBoard.Network
 
             
         }
-        public BitmapImage getWebImage(string url)
+        public BitmapImage getWebImage(string url) //gets an image from the web
         {
 
             try
             {
                 BitmapImage bmi = new BitmapImage();
                 bmi.BeginInit();
-                bmi.UriSource = new System.Uri(url);
+                bmi.UriSource = new System.Uri(url); //get the image
                 bmi.EndInit();
                 return bmi;
             }
@@ -54,8 +54,8 @@ namespace CorkBoard.Network
             string fileType = url.Split('.')[url.Split('.').Length - 1];
             try
             {
-                string rnd = ".\\FILE_" + new Random().Next(111111, 99999999)+"." + fileType;
-                wc.DownloadFile((url.Contains("://") || url.Contains(":\\")) ? url : "http://" + url, rnd);
+                string rnd = ".\\FILE_" + new Random().Next(111111, 99999999)+"." + fileType; //create random file name
+                wc.DownloadFile((url.Contains("://") || url.Contains(":\\")) ? url : "http://" + url, rnd); //get the file
 
                 return rnd;
             }
