@@ -12,7 +12,7 @@ namespace CorkBoard.Network
 {
     class News
     {
-        public string[] getNews(int count, string apiCall)
+        public string[] getNews(int count, string apiCall) //apiCall uses different RSS feeds depending on a settings file
         {
             string[] list = new string[count];
 
@@ -25,8 +25,8 @@ namespace CorkBoard.Network
             {
                 return list;
             }
-            string text = new Net().getWebText(apiCall);
-            dynamic wJson = HelperFunctions.convertToDynamic(text);
+            string text = new Net().getWebText(apiCall); //get rss feed as string
+            dynamic wJson = HelperFunctions.convertToDynamic(text); //convert to JSON
 
             try
             {
