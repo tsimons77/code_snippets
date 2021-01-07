@@ -23,7 +23,7 @@ namespace CorkBoard.Network
         public WeatherInfo getWeather(string zone)
         {
             
-            string apiCall = "https://api.weather.gov/stations/" + zone + "/observations?limit=1";
+            string apiCall = "https://api.weather.gov/stations/" + zone + "/observations?limit=1"; //format API call
             Console.WriteLine(apiCall);
             WeatherInfo info;
             info.temp = -12345; //value for checking errors
@@ -35,8 +35,8 @@ namespace CorkBoard.Network
             {
                 return info;
             }
-            string text = new Net().getWebText(apiCall);
-            dynamic wJson = HelperFunctions.convertToDynamic(text);
+            string text = new Net().getWebText(apiCall); //get weather information
+            dynamic wJson = HelperFunctions.convertToDynamic(text); //convert to JSON
 
             try
             {
