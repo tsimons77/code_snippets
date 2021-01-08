@@ -9,8 +9,8 @@ namespace eldritch.cards
     [System.Serializable]
     public struct CraftingRecipe
     {
-        public string BaseCard;
-        public string FodderCard;
+        public string BaseCard; //main card
+        public string FodderCard; //second card
         public int CraftCost;
         public string ResultCard;
         public static CraftingRecipe Empty
@@ -35,7 +35,7 @@ namespace eldritch.cards
         public Image ResultCard;
         public Text CraftCost;
         Image CardSelector;
-        public GameObject placeholders;
+        public GameObject placeholders; 
         public GameObject selector;
 
         private int selectMode = 0;
@@ -89,15 +89,15 @@ namespace eldritch.cards
             if(fodderCardSRC != null)
                 FodderCard.material = fodderCardSRC.CardImage;
             ResultCard.material = null;
-            if (baseCardSRC != null && fodderCardSRC != null)
+            if (baseCardSRC != null && fodderCardSRC != null) //both cards selected
             {
                 Debug.Log("Showing recipe");
-                CraftingRecipe cr = Library.PreviewCraft(baseCardSRC.CardName, fodderCardSRC.CardName);
+                CraftingRecipe cr = Library.PreviewCraft(baseCardSRC.CardName, fodderCardSRC.CardName); //get recipe
                 if (!cr.Equals(CraftingRecipe.Empty))
                 {
 
                     //CraftCost.text = "COST: " + cr.CraftCost + "";
-                    resultCardSRC = Library.GetCard(cr.ResultCard);
+                    resultCardSRC = Library.GetCard(cr.ResultCard); //get resulting card
                     if (resultCardSRC != null)
                     {
                         ResultCard.material = resultCardSRC.CardImage;
@@ -119,7 +119,7 @@ namespace eldritch.cards
             Debug.Log(Global.userCards.Count + " user cards");
             foreach (Card c in Global.userCards)
             {
-                
+                //mod: 1 if card is selected, 0 if not selected
                 int mod = ((baseCardSRC != null && baseCardSRC.CardName.Equals(c.CardName)) || (fodderCardSRC != null && fodderCardSRC.CardName.Equals(c.CardName))) ? 1 : 0;
                 int inDeck = 0;
                 bool addable = true;
@@ -144,6 +144,7 @@ namespace eldritch.cards
 
         public void Craft()
         {
+        //update inventory
             Global.RemoveCard(baseCardSRC.CardName);
             Global.RemoveCard(fodderCardSRC.CardName);
             Global.AddCard(resultCardSRC.CardName);
