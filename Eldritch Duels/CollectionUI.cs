@@ -30,7 +30,7 @@ namespace eldritch {
             totalPages = Global.userCards.Count / maxCards + Global.userCards.Count % maxCards == 0 ? 0 : Global.userCards.Count > maxCards? 1 : 0;
             
         }
-        public void PageLeft()
+        public void PageLeft() //go back 1 page
         {
 
             page--;
@@ -44,7 +44,7 @@ namespace eldritch {
         }
         
 
-        public void PageRight()
+        public void PageRight() //go forward 1 page
         {
             page++;
             if(page > totalPages)
@@ -54,20 +54,20 @@ namespace eldritch {
             updateCardUI();
         }
 
-        private void updateCardUI()
+        private void updateCardUI() //update visible cards
         {
 
             int count = 0;
             foreach (Transform child in CardPanel.transform)
             {
-                child.gameObject.SetActive(false);
-                if (page * 12 + count < (page + 1) * 12 && page * 12 + count < Global.userCards.Count)
+                child.gameObject.SetActive(false); //reset visiblity
+                if (page * 12 + count < (page + 1) * 12 && page * 12 + count < Global.userCards.Count) //if a card exists
                 {
                     child.gameObject.SetActive(true);
-                    Card c = Global.userCards[page * 12 + count];
+                    Card c = Global.userCards[page * 12 + count]; //get card
                     if (c != null)
                     {
-                        child.gameObject.GetComponent<UnityEngine.UI.Image>().material = c.CardImage;
+                        child.gameObject.GetComponent<UnityEngine.UI.Image>().material = c.CardImage; //update UI
                         child.gameObject.GetComponent<CardEnlarge>().c = c;
                     }
                 }
