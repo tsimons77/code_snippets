@@ -55,9 +55,9 @@ namespace eldritch{
             //init myState
             myState.hp = DuelFunctions.START_HEALTH;
             myState.mana = 1;
-            myState.library = DuelFunctions.ShuffleLibrary(DuelFunctions.GetLibrary());
+            myState.library = DuelFunctions.ShuffleLibrary(DuelFunctions.GetLibrary()); //Randomize order of cards
 
-            //init oppstate
+            //init opponent state
             oppState.hp = DuelFunctions.START_HEALTH;
             oppState.mana = 1;
             oppState.library = DuelFunctions.ShuffleLibrary(AIScript.GetAILibrary());
@@ -88,7 +88,7 @@ namespace eldritch{
         void Update(){
             loadLog();
             checkDeckCount(); // Check & update card back quantity on deck UI
-            //update hp and mana
+            //update UI hp and mana
             setMyHealth(myState.hp);
             setOppHealth(oppState.hp);
             myHPText.text = myState.hp + " HP";
@@ -127,7 +127,7 @@ namespace eldritch{
             }
 
             handCount = 1;
-            while(handCount<=6){ // To add 6 cards to hand
+            while(handCount<=6){ // To add 6 cards to opponent hand
                 Card b = DuelFunctions.DrawCard(ref oppState);
                 if(b == null)
                     break;                
@@ -217,7 +217,7 @@ namespace eldritch{
                         
                     }
                 }
-            }else{
+            }else{ //treat function call as the opponent
                 Card played = null;
                 //update manager
                 for(int i = 0; i < oppState.inHand.Count;i++){
@@ -249,7 +249,7 @@ namespace eldritch{
             }
         }
 
-        private IEnumerator resolveAbilities(Card card, GameObject c){
+        private IEnumerator resolveAbilities(Card card, GameObject c){ //resolve card abilities
             if(card.Abilities != null){
                 if(myTurn){ //resolve for me
                     foreach(Effect e in card.Abilities){
@@ -283,7 +283,7 @@ namespace eldritch{
         }
         public void RecallCard(string cardName){
             if(myTurn){
-                if(myState.onField.Count >= DuelFunctions.MAX_FIELD || true){ //remove true for demo
+                if(myState.onField.Count >= DuelFunctions.MAX_FIELD ){ 
                     Card recalled = null;
                     //update manager
                     for(int i = 0; i< myState.onField.Count;i++){
@@ -339,7 +339,7 @@ namespace eldritch{
         #region attack phase
         public List<AttackBlock> attackers = new List<AttackBlock>();
             //add attacker to attack with
-            public void AddAttacker(GameObject attacker){
+            public void AddAttacker(GameObject attacker){ //add an attacker to the attack list
                 if(attacker.GetComponent<DraggableAI>() == null){
                     return;
                 }
@@ -506,24 +506,24 @@ namespace eldritch{
                     myAttack();
             }
 
-            private void myAttack(){
+            private void myAttack(){ //resolve attacks
         
                 foreach(AttackBlock ab in attackers){
                     if(ab.blocker != null)
                         ab.blocker.GetComponent<Image>().color = Color.white;
                     ab.attacker.GetComponent<Image>().color = Color.white;
-                    if(ab.blocker == null && ab.attackCard != null){
+                    if(ab.blocker == null && ab.attackCard != null){ //attacker not blocked
                         cardsoundsScript.cardAttackSound(soundCard);
                         updateOppHealth(ab.attackCard.AttackPower);
-                    }else if(ab.attackCard != null){
+                    }else if(ab.attackCard != null){ //attaccker is blocked
                         Card blocker = Library.GetCard(ab.blocker.name);
-                        if(blocker.DefencePower > ab.attackCard.AttackPower){
-                            destroyMyCard(ab.attacker);
+                        if(blocker.DefencePower > ab.attackCard.AttackPower){ //
+                            destroyMyCard(ab.attacker); //remove from attack list
                         }else if(blocker.DefencePower < ab.attackCard.AttackPower){
-                            destroyOppCard(ab.blocker);
+                            destroyOppCard(ab.blocker); //remove from attack list
                         }else if(ab.attackCard.AttackPower != 0){
-                            destroyMyCard(ab.attacker);
-                            destroyOppCard(ab.blocker);
+                            destroyMyCard(ab.attacker); //remove from attack list
+                            destroyOppCard(ab.blocker); //remove from attack list
                         }
                     }
                 }
@@ -575,7 +575,7 @@ namespace eldritch{
                     }
             }
 
-            private void oppAttack(){
+            private void oppAttack(){ //same at the myAttack function but reverse player and opponent cards
                 foreach(AttackBlock ab in attackers){
                     
                     ab.attacker.GetComponent<Image>().color = Color.white;
