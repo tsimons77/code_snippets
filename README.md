@@ -14,4 +14,5 @@ There are 5 files from this project focusing on network API calls and JSON stuff
 # Eldritch Duels
 A CCG based on the monsters from H.P. Lovecraft.
 
-
+There are a number of files from this project.
+Files are from AI, inventory, and crafting
