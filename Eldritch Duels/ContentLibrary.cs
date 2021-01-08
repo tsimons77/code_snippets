@@ -37,9 +37,9 @@ namespace eldritch.cards
 
         }
 
-        public Card GetCard(int cardID)
+        public Card GetCard(int cardID) //get a card by id
         {
-            foreach(Card c in _cards)
+            foreach(Card c in _cards) //Unity does not save states of hashmaps so a list was required
             {
                 if(c.CardID == cardID)
                 {
@@ -48,9 +48,9 @@ namespace eldritch.cards
             }
             return null;
         }
-        public Card GetCard(string cardName)
+        public Card GetCard(string cardName) //get card by name
         {
-            foreach (Card c in _cards)
+            foreach (Card c in _cards)  //Unity does not save states of hashmaps so a list was required
             {
                 
                 if (c.CardName.Trim().Equals(cardName.Trim()))
@@ -68,9 +68,9 @@ namespace eldritch.cards
         {
             return _cards;
         }
-        public void RemoveCard(string cardName)
+        public void RemoveCard(string cardName) //remove a card 
         {
-            for(int i = 0; i < _cards.Count; i++)
+            for(int i = 0; i < _cards.Count; i++)  //Unity does not save states of hashmaps so a list was required
             {
                 if (_cards[i].CardName.Equals(cardName))
                 {
@@ -79,7 +79,7 @@ namespace eldritch.cards
                 }
             }
         }
-        public int GetNextID()
+        public int GetNextID() //get next available ID
         {
             if(_cards.Count == 0)
             {
