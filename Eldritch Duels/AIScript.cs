@@ -39,7 +39,9 @@ namespace eldritch{
         private static int AIRandomAdjust = 10; //higher the value, the less random; recommended range (-50, 50)
 
         #region general AI 
-        public static List<Card> GetAILibrary(){
+            //The AI can have multiple potential decks for each difficulty level
+            //This function chooses a random one for a given difficulty
+        public static List<Card> GetAILibrary(){ //Get the AI's cards
             List<Card> res = new List<Card>();
             string s = easyDecks[0];
             if(Difficulty == AIDifficulty.EASY && easyDecks.Length >0){
@@ -71,7 +73,8 @@ namespace eldritch{
         public static void AITurn(AIDuel duelData){
             //AI draw card
             DuelFunctions.DrawCard(ref duelData.oppState);
-
+        //pick AI path based on difficulty
+            //hard and extreme AI differ only on strength of deck
             if(Difficulty == AIDifficulty.EASY){
                 duelData.StartCoroutine(easyTurn(duelData));
             }else if(Difficulty == AIDifficulty.NORMAL){
@@ -87,6 +90,7 @@ namespace eldritch{
             if(duelData.oppState.onField.Count ==0){
                 return;
             }
+            //picks how the AI blocks
             if(Difficulty == AIDifficulty.EASY){
                 easyBlock(duelData);
             }else if(Difficulty == AIDifficulty.NORMAL){
@@ -98,6 +102,7 @@ namespace eldritch{
             }
         }
 
+        //sort list of weighted AI options
         private static void insertAdd(WeightContainer item, SortType type, ref List<WeightContainer> wts){
                 if(wts.Count == 0){
                     wts.Add(item);
@@ -121,18 +126,18 @@ namespace eldritch{
                 wts.Add(item);
             }
 
-            private static int turnsToCast(int turn, int cost, int mana){
+            private static int turnsToCast(int turn, int cost, int mana){ //calculate number of turns to cast a card
                 int turns = 0;
                 for(int i = mana; i < cost;){
                     mana = mana + turn/8 + 1;
                     i = mana;
-                    turn++;
-                    turns++;
+                    turn++; //game turn
+                    turns++; //turns until castable
                 }
                 return turns;
             }
 
-            private static bool PlayRandomCard(AIDuel ad){
+            private static bool PlayRandomCard(AIDuel ad){ //play a random card from hand
                 
                 int handSize = ad.oppState.inHand.Count;
                 int mod = Random.Range(0,handSize);
@@ -145,7 +150,7 @@ namespace eldritch{
 
                 return false;
             }
-            private static bool PlayCard(AIDuel ad, Card c){
+            private static bool PlayCard(AIDuel ad, Card c){ //play a card if able
                 if(DuelFunctions.CanCast(c, ad.oppState)){
                     ad.CastCard(c.CardName, null);
                     return true;
@@ -213,12 +218,6 @@ namespace eldritch{
 
             #endregion
             
-            private static void hardBlock(AIDuel ad){
-                
-            }
-            private static void extremeBlock(AIDuel ad){
-                
-            }
 
              
             
@@ -264,10 +263,10 @@ namespace eldritch{
                     }
                     return true;
                 }
-                private static void attackNormal(AIDuel aIDuel){
+                private static void attackNormal(AIDuel aIDuel){ //simple AI
                     //create list
                     List<WeightContainer> wts = new List<WeightContainer>();
-                    foreach(Card c in aIDuel.oppState.onField){
+                    foreach(Card c in aIDuel.oppState.onField){ //calculate weight of cards in hand
                         WeightContainer wc;
                         wc.card = c;
                         wc.weight = c.AttackPower;
@@ -279,6 +278,7 @@ namespace eldritch{
                     }
 
                 }
+        //calculate the weight of a given card
                 private static int normalWeight(AIDuel data, Card c){
                     float res = 0;
                     res = (c.CardCost * Weights.MANA) + (turnsToCast(data.currentTurn, c.CardCost, data.oppState.mana) * Weights.TURN_DIFFERENCE) + (c.AttackPower * Weights.POWER) + Random.Range(0,3);
